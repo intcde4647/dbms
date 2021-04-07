@@ -1,0 +1,213 @@
+
+SELECT code,name,basic, basic*.10 HRA
+FROM employee_master;
+
+
+CREATE TABLE employee_master
+ (
+   code VARCHAR(6) PRIMARY KEY,
+   name VARCHAR(15) NOT NULL,
+   desig VARCHAR(15) NOT NULL,
+   dept VARCHAR(15) NOT NULL,
+   basic FLOAT(7,2) NOT NULL
+ );
+ALTER table employee_master add column (desig varchar(10), dept varchar(10));
+
+update employee_master set desig='Mgr',dept='HR'
+WHERE code='E00001';
+update employee_master set desig='AsstMgr',dept='HR'
+WHERE code='E00002';
+
+
+INSERT INTO employee_master VALUES('E00001','Akash','Mgr','HR',
+16000);
+
+Display code,name,basic for employees 
+where basic is 10000
+ 
+SELECT code,name,basic
+FROM employee_master
+WHERE basic=10000
+
+Display code,name,basic for employees 
+where basic is less than 15000
+SELECT code,name,basic
+FROM employee_master
+WHERE basic<15000
+Display code,name,basic for employees 
+where basic is greater than or equal to 15000
+and less than equal to 17000 
+
+
+SELECT code,name,basic
+FROM employee_master
+WHERE basic>=15000 AND basic<=17000;
+
+
+SELECT code,name,basic
+FROM employee_master
+WHERE basic between 15000 AND 17000;
+
+Display code,name,basic not between 15000 and 17000.
+
+ 
+
+SELECT code,name,basic
+FROM employee_master
+WHERE basic not between 15000 AND 17000;
+
+Display code,name,desig
+from employee master
+where desig is either manager or asstmanager or typist
+
+SELECT code,name,desig
+FROM employee_master
+WHERE desig='Mgr' OR desig='AsstMgr' OR desig='Typist';
+
+SELECT code,name,desig
+FROM employee_master
+WHERE desig IN('Mgr','AsstMgr','Typist');
+
+DISPLAY code,name,desig
+for all records excluding Mge and AsstMgr.
+
+ SELECT code,name,desig
+FROM employee_master
+WHERE desig NOT IN('Mgr','AsstMgr'); 
+
+SELECT code,name,desig
+WHERE desig is NULL;
+ 
+ SELECT code,name,desig
+FROM employee_master
+WHERE desig is null;
+
+SELECT code,name,desig
+WHERE desig is not NULL.
+
+ 
+ SELECT code,name,desig
+FROM employee_master
+WHERE desig is not  null; 
+
+   
+Display code,name,basic for the employees
+where the name starts with character A.
+
+  SELECT code,name,basic
+  FROM employee_master
+  WHERE name like 'A%';
+
+Display code,name,basic for the employees
+where the name  which don't starts with character A.
+  
+
+  SELECT code,name,basic
+  FROM employee_master
+  WHERE name not like 'A%';
+
+  Display code,name,basic for the employees
+where the name ends up with character 'h';
+
+  SELECT code,name,basic
+  FROM employee_master
+  WHERE name  like '%h';
+
+ Display code,name,basic for the employees
+where the name starts with R and in between two characters
+and ending up with i.
+
+
+ SELECT code,name,basic
+  FROM employee_master
+  WHERE name  like 'R_ _ _ _i';
+ Rashmi
+
+   CREATE table table1
+   (
+    empcode VARCHAR(6),
+    empname VARCHAR(10)
+   ); 
+  
+     INSERT INTO table1 VALUES('E0001','Raj');
+     INSERT INTO table1 VALUES('E0002','Amit');
+     INSERT INTO table1 VALUES('E0004','Jeet');
+     INSERT INTO table1 VALUES('E0002','Amit');
+
+CREATE table table2
+   (
+    code VARCHAR(6),
+    name VARCHAR(10)
+   ); 
+     INSERT INTO table2 VALUES('E0003','Zuben');
+     INSERT INTO table2 VALUES('E0004','Jeet');
+  
+   SELECT empcode.empname
+   FROM table1
+   UNION
+   SELECT code.name
+   FROM table2
+
+
+SELECT empcode.empname
+   FROM table1
+   UNION ALL
+   SELECT code.name
+   FROM table2
+  
+  SELECT empcode.empname
+   FROM table1
+   INTERSECT
+   SELECT code.name
+   FROM table2
+  
+   SELECT empcode.empname
+   FROM table1
+   MINUS
+   SELECT code.name
+   FROM table2
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

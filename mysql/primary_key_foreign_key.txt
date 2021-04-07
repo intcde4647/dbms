@@ -1,0 +1,69 @@
+We need to store the data of employees.
+The employees issue books from office library.
+
+empid
+bookid
+issue_date
+return_date
+book_name
+types
+employee_name
+
+CREATE TABLE emp_master
+(
+empid VARCHAR(5) PRIMARY KEY,
+employee_name VARCHAR(20)
+);
+
+INSERT INTO emp_master VALUES('E0001','Rajan');
+INSERT INTO emp_master VALUES('E0002','John');
+INSERT INTO emp_master VALUES('E0003','Salim');
+----------------------
+CREATE TABLE book_master
+(
+bookid VARCHAR(5) PRIMARY KEY,
+book_name VARCHAR(15),
+type VARCHAR(15)
+);
+INSERT INTO book_master VALUES('B0001','Java','Language');
+INSERT INTO book_master VALUES('B0002','C','Language');
+INSERT INTO book_master VALUES('B0003','SQL','Database');
+--------------------------
+--Without Foreign key.
+
+CREATE TABLE issue_details
+(
+bookid VARCHAR(5),
+empid  VARCHAR(5),
+issue_date DATE,
+return_date DATE
+)
+
+--With Foreign key
+
+CREATE TABLE issue_details(
+  bookid  VARCHAR(5) , 
+  empid  VARCHAR(5),
+issue_date DATE,
+return_date DATE,
+FOREIGN KEY(bookid) REFERENCES book_master( bookid ),
+FOREIGN KEY(empid) REFERENCES emp_master( empid )
+);
+
+INSERT INTO issue_details VALUES('B0001','E0003','2012-10-12','2012-10-13');
+
+
+
+----------------------------------
+
+
+
+
+
+
+
+
+
+
+
+ 

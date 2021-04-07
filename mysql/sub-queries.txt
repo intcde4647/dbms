@@ -1,0 +1,257 @@
+select dept,desig,max(basic)
+from emp_master
+group by dept,desig;
+
+
+set sql_mode='ONLY_FULL_GROUP_BY'
+--------------------------------------------------------------------------
+SELECT name for the employees whose basic is same as of E001.
+
+select name
+from emp_master
+where basic=(select basic from emp_master WHERE code='E001')
+
+
+select name
+from emp_master
+where (basic,desig)=(select basic,desig from emp_master WHERE code='E001')
+
+select name
+from emp_master
+where basic=(select basic from emp_master)
+
+select name
+from emp_master
+where basic IN (select basic from emp_master)
+
+
+------------------------------------------------------------------------
+SELECT name for the basics matched in the emp_master.
+
+select name
+from emp_master
+where basic IN (select basic from emp_master)
+
+
+-----------------------------------------------------------------------------
+SELECT customer_name who have done atleast one transaction.
+(With subquery )
+
+select customer_name
+from customer_master
+where cust_code IN (select cust_code from item_transaction)
+
+----------------------------------------------------------------
+SELECT customer_name who have done atleast one transaction.
+(With Join)
+
+select distinct customer_name
+from customer_master cm JOIN item_transaction it
+ON cm.cust_code=it.cust_code
+
+-----------------------------------------------------------
+Sub Query in the where clause of SELECT.
+
+select customer_name
+from customer_master cm JOIN item_transaction it
+ON cm.custcode=it.custcode
+where qty_pur IN (select qty_pur from item_transaction 
+where qty_pur between 10 and 50)
+
+
+-----------------------------------------------------------------
+CREATE TABLE customer_backup
+(
+ custcode VARCHAR(5) PRIMARY KEY,
+ firstname VARCHAR(20),
+ state VARCHAR(20)
+);
+
+INSERT INTO customer_backup
+SELECT custcode,firstname,state
+FROM customer_master
+WHERE state='Maharastra';
+------------------------------
+
+SELECT custcode,firstname,state
+FROM customer_backup;
+
+
+
+
+Sub Query in update command , where clause.
+
+alter table customer_master add column prvlgd varchar(3);
+
+
+update customer_master
+set prvlgd='yes'
+where cust_code IN (select cust_code from item_transaction);
+
+update customer_master
+set prvlgd='no'
+where cust_code NOT IN (select cust_code from item_transaction);
+
+-----------------------------------------------------------------------------------------
+Sub Query in delete command , where clause.
+
+delete from customer_master
+where cust_code NOT IN (select cust_code from item_transaction);
+
+------------------------------------------------------------------
+Display the item_name which is having maximun price.
+1) SELECT item_name from item_master;
+2) SELECT max(item_price) FROM item_master;
+ ------------------------------------
+  SELECT item_name from item_master
+  WHERE item_price=(SELECT max(item_price) FROM item_master);
+-----------------------------------------------------------------
+
+
+--------------------------------------------------------
+select item_name,item_price
+from item_master
+where item_price > (select avg(item_price) from item_master);
+
+select * from employee_master
+where basic < (select basic from employee_master where 
+emp_name='Akash');
+----------------------------------------------------------------
+Display item name and price where price is less than that of
+the item_name Exotica.
+SELECT item_name,item_price
+FROM item_master
+WHERE item_price<(SELECT item_price FROM item_master WHERE item_name='Exotica');
+
+----------------------------------------------------------------
+Usage of All
+
+
+select dept,count(empcode)
+from employee_master
+group by dept
+having count(empcode)>=ALL(select (count(empcode)) from 
+employee_master
+group by dept);
+
+
+Select dept,count(empcode)
+from employee_master
+group by dept;
+
+Select (count(empcode)) from 
+employee_master
+group by dept)
+
+Select dept,count(empcode)
+from employee_master
+group by dept
+HAVING COUNT(empcode)>=ALL
+(Select (count(empcode)) from 
+employee_master
+group by dept))
+
+
+
+
+-------------------------------------------------------------------------
+Corelated subquery
+
+
+
+select item_code,item_name,item_price
+from item_master im1
+where item_price = (select max(item_price) 
+                    from item_master im2
+                    where im1.item_category=im2.item_category)
+
+
+select max(item_price)
+from item_master
+where item_category='paste'
+
+select emp_code,emp_name,basic,desig
+from employee_master em1
+where basic = (select min(basic) 
+               from employee_master em2
+               where em1.desig=em2.desig);
+
+-------------------------------------------------------------------
+Usage of exists and not exists in corelated sub query.
+
+
+select * from item_master im
+where EXISTS (select * from item_transaction it
+              where it.item_code=im.item_code)
+
+select * from customer_master cm
+where EXISTS (select * from item_transaction it
+              where it.cust_code=cm.cust_code)
+
+select * from item_master im
+where NOT EXISTS (select * from item_transaction it
+                  where it.item_code=im.item_code)
+
+
+-----------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

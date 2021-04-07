@@ -1,0 +1,151 @@
+CREATE DATABASE viewdb;
+use viewdb;
+
+CREATE TABLE emp_master     --creating a table
+ (
+   code VARCHAR(5) PRIMARY KEY,
+   name VARCHAR(20),
+   desig VARCHAR(10),
+   dept VARCHAR(10),
+   basic FLOAT(7,2)
+);
+
+
+--Inserting records
+
+INSERT INTO emp_master VALUES('E0001','Ram','Manager','Sales',15000.50);
+INSERT INTO emp_master VALUES('E0002','Tom','AsstMgr','Sales',12000.50);
+INSERT INTO emp_master VALUES('E0003','Zuben','Manager','Mkt',15000.25);
+INSERT INTO emp_master VALUES('E0004','Radhika','Clerk','HR',6000.00);
+INSERT INTO emp_master VALUES('E0005','Ahmed','Typist','HR',7000.00);
+
+CREATING A VIEW
+
+
+CREATE VIEW emp_view
+AS SELECT code,name,desig
+FROM emp_master;
+
+SELECT code,name,desig
+FROM emp_view;
+
+DROP A VIEW
+
+drop view emp_view;
+---------------------------------------------------------------------------------
+CREATE TABLE item_master
+  (
+  item_code VARCHAR(5),
+  item_name VARCHAR(15) NOT NULL,
+  item_price FLOAT(7,2) NOT NULL,
+  item_category VARCHAR(10) NOT NULL,
+  CONSTRAINT item_master_pk PRIMARY KEY(item_code)
+  );
+
+--add some items in  item_master
+
+ INSERT INTO item_master VALUES('I0001','Colgate',60.78,'Paste');
+ INSERT INTO item_master VALUES('I0002','Lux',20.50,'Soap');
+ INSERT INTO item_master VALUES('I0003','Dettol',25.00,'Soap');
+ INSERT INTO item_master VALUES('I0004','Promise',59.00,'Paste');
+ INSERT INTO item_master VALUES('I0005','Park Avenue',450.00,'Perfume');
+ INSERT INTO item_master VALUES('I0006','Exotica',600.00,'Perfume');
+
+
+--Create table customer_master with
+
+  CREATE TABLE customer_master
+  (
+    cust_code VARCHAR(5),
+    firstname VARCHAR(20) NOT NULL,
+    middlename VARCHAR(20),
+    lastname VARCHAR(20) NOT NULL,
+    address VARCHAR(30) NOT NULL,
+    mobileno VARCHAR(10) NOT NULL,
+    city VARCHAR(30) NOT NULL,
+    state VARCHAR(30) NOT NULL,
+    CONSTRAINT customer_master_pk PRIMARY key(cust_code)
+   );
+
+--add some customers in  item_master
+INSERT INTO customer_master VALUES('C0001','Ram','Kumar','Sharma','A/2 ,Netaji Nagar','9865343412','Durgapur','West Bengal');
+INSERT INTO customer_master VALUES('C0002','Shavant',null,' Pingle','55-A,Jawahar Colony','8763452356','Mumbai','Maharastra');
+INSERT INTO customer_master VALUES('C0003','Rama',null,'Chandran','456-1,Sastri Nagar','9834566788','Kolkata','West Bengal');
+INSERT INTO customer_master VALUES('C0004','Ashok','Kumar','Bajaj','2/1 Mahatma Gandhi Road','7890045666','Pune','Maharastra');
+
+
+--Create table item_transaction
+
+
+ CREATE TABLE item_transaction 
+ (
+   cust_code VARCHAR(5), FK   (ON DELETE CASCADE, ON UPDATE CASCADE)
+   item_code VARCHAR(5), FK   (ON DELETE CASCADE, ON UPDATE CASCADE)
+   date_of_pur DATE NOT NULL,
+   qty_pur INT(5) NOT NULL,
+   CONSTRAINT item_transaction_fk1 FOREIGN KEY(cust_code) REFERENCES customer_master(cust_code) ON DELETE CASCADE ON UPDATE CASCADE,
+   CONSTRAINT item_transaction_fk2 FOREIGN KEY(item_code) REFERENCES item_master(item_code) ON DELETE CASCADE ON UPDATE CASCADE
+ );
+
+ 
+INSERT INTO item_transaction VALUES('C0001','I0003','2016-01-15',100);
+INSERT INTO item_transaction VALUES('C0002','I0003','2016-03-13',50);
+INSERT INTO item_transaction VALUES('C0001','I0005','2015-12-04',10);
+
+ CREATE view cust_view
+AS SELECT it.cust_code,firstname,middlename,it.item_code,item_name,item_price,date_of_pur
+ FROM customer_master cm JOIN item_transaction it JOIN item_master im
+ ON cm.cust_code=it.cust_code
+ AND im.item_code=it.item_code;
+
+SELECT * FROM cust_view;
+
+
+
+CREATE TABLE t1 (a INT);
+
+CREATE VIEW v1 AS SELECT * FROM t1 WHERE a < 2
+WITH CHECK OPTION;
+
+INSERT INTO v1 VALUES(1);
+INSERT INTO v1 VALUES(3);
+
+CREATE VIEW v2 AS SELECT * FROM v1 WHERE a > 0
+WITH LOCAL CHECK OPTION;
+INSERT INTO V2 VALUES(10);
+
+
+CREATE VIEW v3 AS SELECT * FROM v1 WHERE a > 0
+WITH CASCADED CHECK OPTION;
+
+INSERT INTO v2 VALUES (2);
+INSERT INTO v3 VALUES (2);
+
+------------------------------------------------------------------------------------------------------
+INLINE VIEW
+
+
+SELECT item_name,max_price FROM
+item_master  JOIN (SELECT item_category,max(item_price) max_price 
+FROM item_master
+GROUP BY item_category) maximum_price 
+ON item_master.item_category=maximum_price.item_category
+AND item_master.item_price=maximum_price.max_price;
+
+
+
+CREATE VIEW myView AS
+SELECT *
+FROM employee
+WITH READ ONLY CONSTRAINT my_view_read_only;
+---------------------------------------------------------------------------------------------------------
+INDEXING
+
+CREATE INDEX index_customer_names ON customer_master(customer_name);
+
+CREATE UNIQUE INDEX index_customer_names2 ON customer_master(lastname);
+ 
+ALTER TABLE customer_master DROP INDEX index_customer_names;
+
+
+

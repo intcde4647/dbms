@@ -1,0 +1,159 @@
+
+1) GROUP BY
+2) HAVING
+3) ORDER By
+-----------------
+CREATE TABLE employee_master
+(
+  empcode VARCHAR(6) PRIMARY KEY,
+  firstname VARCHAR(15) NOT NULL,
+  middlename VARCHAR(15),
+  lastname VARCHAR(15) NOT NULL,
+  desig VARCHAR(15) NOT NULL,
+  dept VARCHAR(15) NOT NULL,
+  basic FLOAT(7,2) NOT NULL,
+  date_of_birth DATE NOT NULL
+);
+
+INSERT INTO employee_master VALUES('E00001','Peter',null,'Desouza','Mgr','Mkt',18000,'1980-12-06');
+INSERT INTO employee_master VALUES('E00002','Nalini','Kumari,'Sharma','AsstMgr','Mkt',12000,'1985-10-12');
+INSERT INTO employee_master VALUES('E00003','Pankaj','Kumar,'Shukla','AsstMgr','HR',15000,'1980-09-10');
+-----------------------------
+SET sql_mode='ONLY_FULL_GROUP_BY';
+
+1) Count the number of employees
+
+   SELECT count(empcode)  number_of_employees
+   FROM employee_master;
+
+2) Count the number of employees designationwise.
+
+    SELECT desig,count(empcode)
+    FROM employee_master
+    GROUP BY desig;
+
+3) SELECT the designations in the employee_master
+   (Dont repeat the designations)
+
+    SELECT DISTINCT desig
+    FROM employee_master;
+
+     OR
+
+    SELECT desig
+    FROM employee_master
+    GROUP BY desig;
+
+  4) Display designationwise total of basic from employee_master
+
+    SELECT desig,sum(basic)
+    FROM employee_master
+    GROUP BY desig;
+
+
+5) Count the number of mangers only
+
+    SELECT desig,count(empcode)
+    FROM employee_master
+    WHERE desig='Mgr'
+    GROUP BY desig;
+
+
+5) Count the number of mangers and asst mgrs only
+    
+    SELECT desig,count(empcode)
+    FROM employee_master
+    WHERE desig in('Mgr','AsstMgr')
+    GROUP BY desig;
+
+
+  SELECT desig,count(empcode)
+    FROM employee_master
+    WHERE desig='Mgr' OR desig='AsstMgr'
+    GROUP BY desig;
+
+) Count the number of mangers and asst mgrs and
+  display if count is more than 1
+
+    SELECT desig,count(empcode)
+    FROM employee_master
+    WHERE desig='Mgr' OR desig='AsstMgr'
+    GROUP BY desig
+    HAVING count(empcode)>1
+
+Display departmentwise , designation count
+   
+   SELECT dept,desig,count(empcode)
+   FROM employee_master
+   GROUP BY dept,desig;
+
+
+ Display empcode,firstname,basic. Sorted on firstname
+
+    SELECT empcode,firstname,basic
+    FROM employee_master
+    ORDER By firstname ASC;
+
+Display empcode,firstname,basic. Sorted on firstname in a 
+descending order
+  
+  SELECT empcode,firstname,basic
+  FROM employee_master
+  ORDER By firstname DESC;
+
+Display empcode,firstname,basic. Sorted on basic in a 
+descending order
+
+SELECT empcode,firstname,basic
+FROM employee_master
+ORDER By basic DESC;
+
+Display empcode,firstname,basic. Sorted on designation
+  (ascending) and within that basic (descending).
+
+ SELECT empcode,frstname,desig,basic
+ FROM employee_master
+ ORDER BY desig asc, basic desc;
+
+
+ Display dept and count. Display should be in 
+descending order of count. That means the 
+ department having more number of employees should
+ be displayed first followed by lesser number
+ of employees
+
+    SELECT dept,count(empcode) 
+    FROM employee_master
+    GROUP by dept
+    ORDER BY count(empcode) DESC;
+
+ 
+ Display dept and count. Display should be in 
+descending order of count. That means the 
+ department having more number of employees should
+ be displayed first followed by lesser number
+ of employees (exclude where the number of count
+ of employee is 1) 
+
+    SELECT dept,count(empcode) 
+    FROM employee_master
+    GROUP by dept
+    HAVING count(empcode)>1
+    ORDER BY count(empcode) DESC;
+
+Display dept and count. Display should be in 
+descending order of count. That means the 
+ department having more number of employees should
+ be displayed first followed by lesser number
+ of employees (exclude where the number of count
+ of employee is 1) . Count for managers only.
+
+
+
+    SELECT dept,count(empcode) 
+    FROM employee_master
+    WHERE desig='Mgr'
+    GROUP by dept
+    HAVING count(empcode)>1
+    ORDER BY count(empcode) DESC;
+

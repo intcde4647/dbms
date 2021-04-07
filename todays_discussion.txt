@@ -1,0 +1,51 @@
+6-April-2021
+
+1. Introduction to Database Languages and DBMS classifications
+2. Data models,schemas, Instances
+3. Introduction to Database Management System
+4. Storage system in DBMS
+5. ACID and BASE concepts
+6. Normalisation
+7. Transaction MAnagement
+8. Query Processing and Optimization
+9. Entity Type, Entity Sets, Keys and Constraints
+
+
+Database ====> which further have other objects Tables,views,indeces, constraints.
+To interact with various database related objects in RDBMS we talk about SQL ( Structured Query Language_
+
+NoSQL database like Cassandra,MongoDB we usually store the data in the form of document.
+
+ 
+Customers purchasing items.
+
+custid firstname lastname address itemid description  itemprice qp     qoh  dateofpurchase
+C0001   Ravi     Kumar    Delhi     null   null       null      null     null   null 
+null    null     null     null      I0001  Pen        100       null     200    null
+C0001   Ravi     Kumar    Delhi     I0001  Pen        100       10       190    12-Mar-2019
+-----------------------------------------------------------------------------------------------
+
+  ITem id ----> determinant 
+  item desc----> dependent
+  
+I0001 is for item Pen
+------------------------------------------------------
+
+ emplid ------> determinant 
+ empdesig -----> dependent
+ 
+E0001 is an id of a manager
+
+can empdesig be a determinant?
+No. because when we say say manager we can have E0001, E0004 and E0010.
+
+--------------------------------------------------------------------------------------------------------------
+5th day ( 7-April-2021)
+
+* Restful WebServices
+* Micro Services
+* Cloud Computing 
+------------------------------------------------------------------------------------------------------------
+
+
+
